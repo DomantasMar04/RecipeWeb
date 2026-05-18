@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipes</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h2>🍽 Recipes</h2>
+
+    <h3>Add recipe</h3>
+
+    <input id="title" placeholder="Title">
+    <input id="category" placeholder="Category">
+    <input id="time" placeholder="Cooking time">
+    <textarea id="description" placeholder="Description"></textarea>
+
+    <button class="btn" onclick="createRecipe()">Add</button>
+
+    <hr>
+
+    <h3>All recipes</h3>
+    <button class="btn" onclick="loadRecipes()">Refresh</button>
+
+    <div id="list"></div>
+
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
