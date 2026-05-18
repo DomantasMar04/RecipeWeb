@@ -44,3 +44,19 @@ input, textarea {
     margin: 10px 0;
     border-radius: 5px;
 }
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.card-header h3 {
+    margin: 0;
+}
+
+.favorite-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+}

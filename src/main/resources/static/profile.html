@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Profile</h1>
+
+    <p>
+        <a href="/recipes.html">Back to recipes</a>
+    </p>
+
+    <button class="btn" onclick="logout()">Log out</button>
+
+    <h2>User info</h2>
+
+    <div class="card">
+        <p><b>Username:</b> <span id="profileUsername"></span></p>
+        <p><b>Email:</b> <span id="profileEmail"></span></p>
+    </div>
+
+    <h2>Statistics</h2>
+
+    <div class="card">
+        <p><b>Total posted recipes:</b> <span id="totalRecipes"></span></p>
+        <p><b>Total upvotes:</b> <span id="totalUpvotes"></span></p>
+        <p><b>Total downvotes:</b> <span id="totalDownvotes"></span></p>
+        <p><b>Overall score:</b> <span id="overallScore"></span></p>
+        <p><b>My top recipe:</b> <span id="topRecipe"></span></p>
+    </div>
+
+    <h2>My posted recipes</h2>
+    <div id="myRecipes"></div>
+
+    <h2>My favorite recipes</h2>
+    <div id="favoriteRecipes"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
