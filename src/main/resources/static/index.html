@@ -1,15 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="lt">
 <head>
+    <meta charset="UTF-8">
     <title>Recipe App</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<h1>Recipe Manager</h1>
+<nav>
+    <a class="nav-brand" href="/index.html">🍴 Receptai</a>
+    <div class="nav-links">
+        <a href="/recipes.html">Receptai</a>
+        <a href="/login.html">Prisijungti</a>
+        <a href="/signup.html" class="btn btn-primary" style="width:auto;padding:7px 16px;">Registruotis</a>
+    </div>
+</nav>
 
-<a href="/login.html">Login</a><br>
-<a href="/signup.html">Signup</a><br>
-<a href="/recipes.html">Recipes</a>
+<div class="page" style="text-align:center; padding-top: 80px;">
+    <h1>Sveiki atvykę</h1>
+    <p style="color: var(--text-muted); margin: 12px 0 32px;">Dalinkitės receptais, balsuokite, atraskite naujų patiekalų.</p>
+    <a class="btn btn-primary" href="/recipes.html" style="width:auto; display:inline-block;">Peržiūrėti receptus →</a>
+</div>
 
+<script src="/app.js"></script>
 </body>
 </html>

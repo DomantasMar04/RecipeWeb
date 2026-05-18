@@ -1,23 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="lt">
 <head>
-    <title>Signup</title>
+    <meta charset="UTF-8">
+    <title>Registracija</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<div class="container">
+<nav>
+    <a class="nav-brand" href="/index.html">🍴 Receptai</a>
+    <div class="nav-links">
+        <a href="/login.html">Prisijungti</a>
+    </div>
+</nav>
 
-    <h2>Signup</h2>
+<div class="page-narrow">
+    <div class="auth-card">
+        <h2>Registracija</h2>
 
-    <input id="username" placeholder="Username">
-    <input id="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
+        <div class="field">
+            <label>Slapyvardis</label>
+            <input id="username" placeholder="jusu_vardas">
+        </div>
 
-    <button class="btn" onclick="signup()">Register</button>
+        <div class="field">
+            <label>El. paštas</label>
+            <input id="email" placeholder="jusu@pastas.lt">
+        </div>
 
-    <p id="msg"></p>
+        <div class="field">
+            <label>Slaptažodis</label>
+            <input id="password" type="password" placeholder="••••••••">
+        </div>
 
+        <button class="btn btn-primary" onclick="signup()">Registruotis</button>
+
+        <p id="msg"></p>
+
+        <div class="auth-footer">
+            Jau turite paskyrą? <a href="/login.html">Prisijungti</a>
+        </div>
+    </div>
 </div>
 
 <script src="/app.js"></script>

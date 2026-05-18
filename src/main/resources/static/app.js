@@ -97,14 +97,40 @@ async function createRecipe() {
             return;
         }
 
+        const title = valueOf("title");
+        const category = valueOf("category");
+        const time = valueOf("time");
+        const description = valueOf("description");
+
+        // validation
+        if (!title || !category || !time || !description) {
+            alert("Užpildykite visus laukus");
+            return;
+        }
+
+        if (title.length < 3) {
+            alert("Pavadinimas turi būti bent 3 simboliai");
+            return;
+        }
+
+        if (description.length < 10) {
+            alert("Aprašymas turi būti bent 10 simbolių");
+            return;
+        }
+
+        if (Number(time) < 1) {
+            alert("Gaminimo laikas turi būti bent 1 min");
+            return;
+        }
+
         await request(API + "/recipes", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                title: valueOf("title"),
-                category: valueOf("category"),
-                cookingTime: Number(valueOf("time")),
-                description: valueOf("description"),
+                title,
+                category,
+                cookingTime: Number(time),
+                description,
                 userId: Number(userId)
             })
         });
@@ -134,25 +160,28 @@ async function loadRecipes() {
     <div class="card">
         <div class="card-header">
             <h3>${recipe.title}</h3>
-            <button class="favorite-btn" onclick="favoriteRecipe(${recipe.id})">Favorite</button>
+            <button 
+    class="btn ${recipe.favorite ? "btn-primary" : "btn-outline"} btn-sm"
+    onclick="favoriteRecipe(${recipe.id})"
+>
+    ${recipe.favorite ? "❤️ Išsaugota" : "🤍 Išsaugoti"}
+</button>
         </div>
 
-        <p>${recipe.description}</p>
+        <div class="card-meta">
+            <span class="badge">🍽 ${recipe.category}</span>
+            <span class="badge">⏱ ${recipe.cookingTime} min</span>
+        </div>
 
-        <small>
-            Posted by: ${recipe.author ? recipe.author.username : "Unknown"}
-            <br>
-            ${recipe.category} | ${recipe.cookingTime} min
-            <br>
-            Upvotes: ${recipe.upvotes} | Downvotes: ${recipe.downvotes}
-            <br>
-            Score: ${recipe.score}
-        </small>
+        <p class="card-desc">${recipe.description}</p>
 
-        <br><br>
+        <div class="card-author">Autorius: ${recipe.author ? recipe.author.username : "Nežinomas"}</div>
 
-        <button onclick="upvoteRecipe(${recipe.id})">Upvote</button>
-        <button onclick="downvoteRecipe(${recipe.id})">Downvote</button>
+        <div class="card-votes">
+            <button class="btn btn-upvote btn-sm" onclick="upvoteRecipe(${recipe.id})">▲ ${recipe.upvotes}</button>
+            <button class="btn btn-downvote btn-sm" onclick="downvoteRecipe(${recipe.id})">▼ ${recipe.downvotes}</button>
+            <span class="vote-score">Score: ${recipe.score}</span>
+        </div>
     </div>
 `;
         });
@@ -261,14 +290,16 @@ function showMyRecipes(recipes) {
         myRecipes.innerHTML += `
             <div class="card">
                 <h3>${recipe.title}</h3>
-                <p>${recipe.description}</p>
-                <small>
-                    ${recipe.category} | ${recipe.cookingTime} min
-                    <br>
-                    Upvotes: ${recipe.upvotes} | Downvotes: ${recipe.downvotes}
-                    <br>
-                    Score: ${recipe.score}
-                </small>
+                <div class="card-meta">
+                    <span class="badge">🍽 ${recipe.category}</span>
+                    <span class="badge">⏱ ${recipe.cookingTime} min</span>
+                </div>
+                <p class="card-desc">${recipe.description}</p>
+                <div class="card-votes">
+                    <span class="btn btn-upvote btn-sm">▲ ${recipe.upvotes}</span>
+                    <span class="btn btn-downvote btn-sm">▼ ${recipe.downvotes}</span>
+                    <span class="vote-score">Score: ${recipe.score}</span>
+                </div>
             </div>
         `;
     });
@@ -287,20 +318,18 @@ function showFavoriteRecipes(recipes) {
         favoriteRecipes.innerHTML += `
             <div class="card">
                 <h3>${recipe.title}</h3>
-                <p>${recipe.description}</p>
-                <small>
-                    Posted by: ${recipe.author ? recipe.author.username : "Unknown"}
-                    <br>
-                    ${recipe.category} | ${recipe.cookingTime} min
-                    <br>
-                    Upvotes: ${recipe.upvotes} | Downvotes: ${recipe.downvotes}
-                    <br>
-                    Score: ${recipe.score}
-                </small>
-
-                <br><br>
-
-                <button onclick="unfavoriteRecipe(${recipe.id})">Remove from favorites</button>
+                <div class="card-meta">
+                    <span class="badge">🍽 ${recipe.category}</span>
+                    <span class="badge">⏱ ${recipe.cookingTime} min</span>
+                </div>
+                <p class="card-desc">${recipe.description}</p>
+                <div class="card-author">Autorius: ${recipe.author ? recipe.author.username : "Nežinomas"}</div>
+                <div class="card-votes">
+                    <span class="btn btn-upvote btn-sm">▲ ${recipe.upvotes}</span>
+                    <span class="btn btn-downvote btn-sm">▼ ${recipe.downvotes}</span>
+                    <span class="vote-score">Score: ${recipe.score}</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="unfavoriteRecipe(${recipe.id})">✕ Pašalinti iš mėgstamų</button>
             </div>
         `;
     });

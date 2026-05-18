@@ -1,35 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="lt">
 <head>
-    <title>Recipes</title>
+    <meta charset="UTF-8">
+    <title>Receptai</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<div class="container">
+<nav>
+    <a class="nav-brand" href="/index.html">🍴 Receptai</a>
+    <div class="nav-links">
+        <a href="/profile.html">Mano profilis</a>
+        <button onclick="logout()">Atsijungti</button>
+    </div>
+</nav>
 
-    <h2>Recipes</h2>
+<div class="page">
+    <div class="recipes-layout">
 
-    <p>
-        <a href="/profile.html">My profile</a>
-    </p>
+        <!-- LEFT SIDE -->
+        <div class="add-recipe-panel">
+            <h2>Pridėti receptą</h2>
 
-    <h3>Add recipe</h3>
+            <div class="field">
+                <label>Pavadinimas</label>
+                <input id="title" placeholder="pvz. Cepelinai su mėsa">
+            </div>
 
-    <input id="title" placeholder="Title">
-    <input id="category" placeholder="Category">
-    <input id="time" type="number" placeholder="Cooking time in minutes">
-    <textarea id="description" placeholder="Description"></textarea>
+            <div class="form-row">
+                <div class="field">
+                    <label>Kategorija</label>
+                    <input id="category" placeholder="pvz. Pietūs">
+                </div>
 
-    <button class="btn" onclick="createRecipe()">Add</button>
+                <div class="field">
+                    <label>Gaminimo laikas (min)</label>
+                    <input id="time" type="number" placeholder="60">
+                </div>
+            </div>
 
-    <hr>
+            <div class="field">
+                <label>Aprašymas</label>
+                <textarea id="description" placeholder="Trumpai aprašykite receptą..."></textarea>
+            </div>
 
-    <h3>All recipes</h3>
-    <button class="btn" onclick="loadRecipes()">Refresh</button>
+            <button class="btn btn-primary" style="width:auto;" onclick="createRecipe()">
+                Pridėti receptą
+            </button>
+        </div>
 
-    <div id="list"></div>
+        <!-- RIGHT SIDE -->
+        <div class="recipes-content">
+            <div class="section-header">
+                <h2 style="margin:0;">Visi receptai</h2>
+                <button class="btn btn-outline btn-sm" onclick="loadRecipes()">
+                    ↻ Atnaujinti
+                </button>
+            </div>
 
+            <div class="recipe-grid" id="list"></div>
+        </div>
+
+    </div>
 </div>
 
 <script src="/app.js"></script>

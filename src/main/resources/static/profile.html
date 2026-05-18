@@ -1,44 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="lt">
 <head>
-    <title>Profile</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Profilis</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-<div class="container">
-    <h1>Profile</h1>
+<nav>
+    <a class="nav-brand" href="/index.html">🍴 Receptai</a>
+    <div class="nav-links">
+        <a href="/recipes.html">← Receptai</a>
+        <button onclick="logout()">Atsijungti</button>
+    </div>
+</nav>
 
-    <p>
-        <a href="/recipes.html">Back to recipes</a>
+<div class="page">
+
+    <!-- Profile header -->
+    <div class="profile-header">
+        <div class="avatar" id="avatarLetter">?</div>
+        <div>
+            <h1 id="profileUsername">...</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem;" id="profileEmail">...</p>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" id="totalRecipes">—</div>
+            <div class="stat-label">Receptai</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="totalUpvotes">—</div>
+            <div class="stat-label">Upvotai</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="totalDownvotes">—</div>
+            <div class="stat-label">Downvotai</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="overallScore">—</div>
+            <div class="stat-label">Bendras score</div>
+        </div>
+    </div>
+
+    <p style="font-size:0.9rem; color: var(--text-muted);">
+        🏆 Geriausias receptas: <strong><span id="topRecipe">—</span></strong>
     </p>
 
-    <button class="btn" onclick="logout()">Log out</button>
+    <!-- My recipes -->
+    <div class="section-title">Mano receptai</div>
+    <div class="recipe-grid" id="myRecipes"></div>
 
-    <h2>User info</h2>
+    <!-- Favorites -->
+    <div class="section-title">Mėgstami receptai</div>
+    <div class="recipe-grid" id="favoriteRecipes"></div>
 
-    <div class="card">
-        <p><b>Username:</b> <span id="profileUsername"></span></p>
-        <p><b>Email:</b> <span id="profileEmail"></span></p>
-    </div>
-
-    <h2>Statistics</h2>
-
-    <div class="card">
-        <p><b>Total posted recipes:</b> <span id="totalRecipes"></span></p>
-        <p><b>Total upvotes:</b> <span id="totalUpvotes"></span></p>
-        <p><b>Total downvotes:</b> <span id="totalDownvotes"></span></p>
-        <p><b>Overall score:</b> <span id="overallScore"></span></p>
-        <p><b>My top recipe:</b> <span id="topRecipe"></span></p>
-    </div>
-
-    <h2>My posted recipes</h2>
-    <div id="myRecipes"></div>
-
-    <h2>My favorite recipes</h2>
-    <div id="favoriteRecipes"></div>
 </div>
 
-<script src="app.js"></script>
+<script src="/app.js"></script>
+<script>
+    // Show first letter in avatar after profile loads
+    const origLoadProfile = window.loadProfile;
+    document.addEventListener('DOMContentLoaded', () => {
+        // Avatar letter update hook
+        const observer = new MutationObserver(() => {
+            const name = document.getElementById('profileUsername').innerText;
+            if (name && name !== '...') {
+                document.getElementById('avatarLetter').innerText = name[0].toUpperCase();
+                observer.disconnect();
+            }
+        });
+        observer.observe(document.getElementById('profileUsername'), { childList: true, characterData: true, subtree: true });
+    });
+</script>
 </body>
 </html>
