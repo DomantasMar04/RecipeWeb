@@ -156,16 +156,34 @@ async function loadRecipes() {
         list.innerHTML = "";
 
         data.forEach(recipe => {
+            const currentUserId = localStorage.getItem("userId");
+
+            // Tikriname, ar prisijungęs vartotojas yra šio recepto autorius
+            let editButtonHtml = "";
+            if (recipe.author && recipe.author.id == currentUserId) {
+                // Kadangi tekste gali būti kabučių, jas saugiai pakeičiame, kad nesulaužytų HTML
+                const safeTitle = recipe.title.replace(/'/g, "\\'");
+                const safeCategory = recipe.category.replace(/'/g, "\\'");
+                const safeDesc = recipe.description.replace(/'/g, "\\'");
+
+                editButtonHtml = `
+            <button class="btn btn-outline btn-sm" style="margin-left: 10px; border-color: #ffa500; color: #ffa500;"
+                onclick="prepareEditRecipe(${recipe.id}, '${safeTitle}', '${safeCategory}', ${recipe.cookingTime}, '${safeDesc}')">
+                ✏️ Redaguoti
+            </button>
+        `;
+            }
+
             list.innerHTML += `
     <div class="card">
         <div class="card-header">
             <h3>${recipe.title}</h3>
             <button 
-    class="btn ${recipe.favorite ? "btn-primary" : "btn-outline"} btn-sm"
-    onclick="favoriteRecipe(${recipe.id})"
->
-    ${recipe.favorite ? "❤️ Išsaugota" : "🤍 Išsaugoti"}
-</button>
+                class="btn ${recipe.favorite ? "btn-primary" : "btn-outline"} btn-sm"
+                onclick="favoriteRecipe(${recipe.id})"
+            >
+                ${recipe.favorite ? "❤️ Išsaugota" : "🤍 Išsaugoti"}
+            </button>
         </div>
 
         <div class="card-meta">
@@ -181,9 +199,9 @@ async function loadRecipes() {
             <button class="btn btn-upvote btn-sm" onclick="upvoteRecipe(${recipe.id})">▲ ${recipe.upvotes}</button>
             <button class="btn btn-downvote btn-sm" onclick="downvoteRecipe(${recipe.id})">▼ ${recipe.downvotes}</button>
             <span class="vote-score">Score: ${recipe.score}</span>
-        </div>
+            ${editButtonHtml} </div>
     </div>
-`;
+    `;
         });
     } catch (error) {
         list.innerHTML = `<p>${error.message}</p>`;
@@ -299,6 +317,12 @@ function showMyRecipes(recipes) {
                     <span class="btn btn-upvote btn-sm">▲ ${recipe.upvotes}</span>
                     <span class="btn btn-downvote btn-sm">▼ ${recipe.downvotes}</span>
                     <span class="vote-score">Score: ${recipe.score}</span>
+                </div>
+                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                    <button class="btn btn-sm" style="background-color: #dc3545; color: white; border: none;"
+                        onclick="deleteRecipe(${recipe.id})">
+                        🗑️ Ištrinti
+                    </button>
                 </div>
             </div>
         `;
@@ -425,4 +449,99 @@ if (window.location.pathname.includes("recipes")) {
 }
 if (window.location.pathname.includes("profile")) {
     loadProfile();
+}
+// Šis kintamasis saugo redaguojamo recepto ID
+let currentEditingRecipeId = null;
+
+// 1. Užpildo formą recepto duomenimis, kai paspaudi "Redaguoti"
+function prepareEditRecipe(id, title, category, cookingTime, description) {
+    currentEditingRecipeId = id;
+
+    // Supildome reikšmes į input laukus kairėje pusėje
+    document.getElementById("title").value = title;
+    document.getElementById("category").value = category;
+    document.getElementById("time").value = cookingTime;
+    document.getElementById("description").value = description;
+
+    // Surandame mygtuką ir pakeičiame jo tekstą į "Išsaugoti pakeitimus"
+    const submitBtn = document.getElementById("submitBtn");
+    if (submitBtn) submitBtn.innerText = "💾 Išsaugoti pakeitimus";
+}
+
+// 2. Vykdo TIK atnaujinimo (PUT) užklausą
+async function updateRecipe() {
+    // Jei vartotojas bando spausti mygtuką, bet nepaspaudė "Redaguoti" ant jokio recepto
+    if (currentEditingRecipeId === null) {
+        alert("Pirmiausia receptų sąraše paspauskite '✏️ Redaguoti' prie norimo recepto!");
+        return;
+    }
+
+    try {
+        const userId = localStorage.getItem("userId");
+        const title = valueOf("title");
+        const category = valueOf("category");
+        const time = valueOf("time");
+        const description = valueOf("description");
+
+        // Validacija
+        if (!title || !category || !time || !description) {
+            alert("Užpildykite visus laukus");
+            return;
+        }
+
+        // Siunčiame PUT užklausą į Back-end atnaujinimui
+        await request(API + "/recipes/" + currentEditingRecipeId, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                title,
+                category,
+                cookingTime: Number(time),
+                description,
+                userId: Number(userId) // Reikalinga saugumo patikrai serveryje
+            })
+        });
+
+        alert("Receptas sėkmingai atnaujintas!");
+
+        // Išvalome formą ir atstatome kintamąjį į pradinę būseną
+        currentEditingRecipeId = null;
+        document.getElementById("title").value = "";
+        document.getElementById("category").value = "";
+        document.getElementById("time").value = "";
+        document.getElementById("description").value = "";
+
+        const submitBtn = document.getElementById("submitBtn");
+        if (submitBtn) submitBtn.innerText = "Atnaujinti receptą";
+
+        // Perkeliame/atnaujiname sąrašą ekrane
+        loadRecipes();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function deleteRecipe(id) {
+    // Saugumo sumetimais paklausiame vartotojo, ar jis tikrai nori trinti
+    if (!confirm("Ar tikrai norite ištrinti šį receptą visam laikui?")) {
+        return;
+    }
+
+    try {
+        // Siunčiame DELETE užklausą adresu /api/recipes/{id}
+        const message = await request(API + "/recipes/" + id, {
+            method: "DELETE"
+        });
+
+        alert("Receptas sėkmingai ištrintas!");
+
+        // Kadangi ištrynėme receptą, iš naujo perkrauname profilio duomenis ir sąrašus
+        if (window.location.pathname.includes("profile")) {
+            loadProfile();
+        } else if (typeof loadRecipes === "function") {
+            loadRecipes();
+        }
+    } catch (error) {
+        alert("Nepavyko ištrinti recepto: " + error.message);
+    }
 }

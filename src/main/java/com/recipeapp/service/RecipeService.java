@@ -2,11 +2,6 @@ package com.recipeapp.service;
 
 import com.recipeapp.dto.RecipeRequest;
 import com.recipeapp.model.Recipe;
-import com.recipeapp.repository.RecipeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.recipeapp.dto.RecipeRequest;
-import com.recipeapp.model.Recipe;
 import com.recipeapp.model.User;
 import com.recipeapp.repository.RecipeRepository;
 import com.recipeapp.repository.UserRepository;
@@ -54,10 +49,15 @@ public class RecipeService {
         return recipeRepository.findById(id).orElse(null);
     }
 
-    public Recipe update(Long id, RecipeRequest req) {
+    public Recipe update(Long id, RecipeRequest req, Long userId) {
         Recipe recipe = recipeRepository.findById(id).orElse(null);
 
         if (recipe == null) {
+            return null;
+        }
+
+        // Saugumo patikra gynimui: leidžiame redaguoti tik autoriui
+        if (recipe.getAuthor() != null && !recipe.getAuthor().getId().equals(userId)) {
             return null;
         }
 

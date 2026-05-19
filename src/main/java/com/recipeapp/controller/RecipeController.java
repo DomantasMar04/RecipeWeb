@@ -42,9 +42,11 @@ public class RecipeController {
         return recipeService.getById(id);
     }
 
+    // TEISINGAS UPDATE METODAS VALDIKLYJE:
     @PutMapping("/{id}")
     public Recipe update(@PathVariable Long id, @RequestBody RecipeRequest req) {
-        return recipeService.update(id, req);
+        // Valdiklis tik priima HTTP užklausą ir viską deleguoja servisui
+        return recipeService.update(id, req, req.userId);
     }
 
     @DeleteMapping("/{id}")
