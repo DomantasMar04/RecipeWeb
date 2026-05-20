@@ -19,7 +19,6 @@
 
     <!-- Profile header -->
     <div class="profile-header">
-        <div class="avatar" id="avatarLetter">?</div>
         <div>
             <h1 id="profileUsername">...</h1>
             <p style="color: var(--text-muted); font-size: 0.9rem;" id="profileEmail">...</p>
@@ -61,20 +60,5 @@
 </div>
 
 <script src="/app.js"></script>
-<script>
-    // Show first letter in avatar after profile loads
-    const origLoadProfile = window.loadProfile;
-    document.addEventListener('DOMContentLoaded', () => {
-        // Avatar letter update hook
-        const observer = new MutationObserver(() => {
-            const name = document.getElementById('profileUsername').innerText;
-            if (name && name !== '...') {
-                document.getElementById('avatarLetter').innerText = name[0].toUpperCase();
-                observer.disconnect();
-            }
-        });
-        observer.observe(document.getElementById('profileUsername'), { childList: true, characterData: true, subtree: true });
-    });
-</script>
 </body>
 </html>
