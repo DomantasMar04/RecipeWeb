@@ -20,10 +20,8 @@ public class RecipeController {
 
     @Autowired
     private RecipeService recipeService;
-
     @Autowired
     private FavoriteRepository favoriteRepository;
-
     @Autowired
     private UserRepository userRepository;
 

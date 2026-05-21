@@ -474,6 +474,9 @@ function prepareEditRecipe(id, title, category, cookingTime, description) {
         updateBtn.disabled = false;
         updateBtn.innerText = "Atnaujinti receptą";
     }
+
+    const createBtn = document.getElementById("createBtn");
+    if (createBtn) createBtn.style.display = "none";
 }
 
 // 2. Vykdo TIK atnaujinimo (PUT) užklausą
@@ -524,6 +527,7 @@ async function updateRecipe() {
             updateBtn.disabled = true;
             updateBtn.innerText = "Atnaujinti receptą";
         }
+
 
         // Perkeliame/atnaujiname sąrašą ekrane
         loadRecipes();
