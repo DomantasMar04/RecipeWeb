@@ -142,11 +142,6 @@ async function createRecipe() {
 
         currentEditingRecipeId = null;
 
-        const updateBtn = document.getElementById("updateBtn");
-        if (updateBtn) {
-            updateBtn.disabled = true;
-        }
-
         loadRecipes();
     } catch (error) {
         alert(error.message);
@@ -460,6 +455,7 @@ if (window.location.pathname.includes("profile")) {
 // Šis kintamasis saugo redaguojamo recepto ID
 let currentEditingRecipeId = null;
 
+
 // 1. Užpildo formą recepto duomenimis, kai paspaudi "Redaguoti"
 function prepareEditRecipe(id, title, category, cookingTime, description) {
     currentEditingRecipeId = id;
@@ -528,6 +524,8 @@ async function updateRecipe() {
             updateBtn.innerText = "Atnaujinti receptą";
         }
 
+        const createBtn = document.getElementById("createBtn");
+        if (createBtn) createBtn.style.display = "";
 
         // Perkeliame/atnaujiname sąrašą ekrane
         loadRecipes();
