@@ -20,11 +20,11 @@
 
         <!-- LEFT SIDE -->
         <div class="add-recipe-panel">
-            <h2>Redaguoti receptą</h2>
+            <h2>Recepto forma</h2>
 
             <div class="field">
                 <label>Pavadinimas</label>
-                <input id="title" placeholder="Pasirinkite receptą redagavimui...">
+                <input id="title" placeholder="Įveskite recepto pavadinimą...">
             </div>
 
             <div class="form-row">
@@ -44,9 +44,15 @@
                 <textarea id="description" placeholder="Trumpai aprašykite receptą..."></textarea>
             </div>
 
-            <button class="btn btn-primary" id="submitBtn" style="width:auto;" onclick="updateRecipe()">
-                Atnaujinti receptą
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="createRecipe()">
+                    Sukurti receptą
+                </button>
+
+                <button class="btn btn-outline" id="updateBtn" onclick="updateRecipe()" disabled>
+                    Atnaujinti receptą
+                </button>
+            </div>
         </div>
 
         <!-- RIGHT SIDE -->

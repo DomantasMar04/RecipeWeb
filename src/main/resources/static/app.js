@@ -140,6 +140,13 @@ async function createRecipe() {
         document.getElementById("time").value = "";
         document.getElementById("description").value = "";
 
+        currentEditingRecipeId = null;
+
+        const updateBtn = document.getElementById("updateBtn");
+        if (updateBtn) {
+            updateBtn.disabled = true;
+        }
+
         loadRecipes();
     } catch (error) {
         alert(error.message);
@@ -457,15 +464,16 @@ let currentEditingRecipeId = null;
 function prepareEditRecipe(id, title, category, cookingTime, description) {
     currentEditingRecipeId = id;
 
-    // Supildome reikšmes į input laukus kairėje pusėje
     document.getElementById("title").value = title;
     document.getElementById("category").value = category;
     document.getElementById("time").value = cookingTime;
     document.getElementById("description").value = description;
 
-    // Surandame mygtuką ir pakeičiame jo tekstą į "Išsaugoti pakeitimus"
-    const submitBtn = document.getElementById("submitBtn");
-    if (submitBtn) submitBtn.innerText = "💾 Išsaugoti pakeitimus";
+    const updateBtn = document.getElementById("updateBtn");
+    if (updateBtn) {
+        updateBtn.disabled = false;
+        updateBtn.innerText = "Atnaujinti receptą";
+    }
 }
 
 // 2. Vykdo TIK atnaujinimo (PUT) užklausą
@@ -511,8 +519,11 @@ async function updateRecipe() {
         document.getElementById("time").value = "";
         document.getElementById("description").value = "";
 
-        const submitBtn = document.getElementById("submitBtn");
-        if (submitBtn) submitBtn.innerText = "Atnaujinti receptą";
+        const updateBtn = document.getElementById("updateBtn");
+        if (updateBtn) {
+            updateBtn.disabled = true;
+            updateBtn.innerText = "Atnaujinti receptą";
+        }
 
         // Perkeliame/atnaujiname sąrašą ekrane
         loadRecipes();
